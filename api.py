@@ -62,7 +62,7 @@ def compras_usuario_por_id(id: int, id_compra: int):
     }
 
     return compra
-#Consultas a la BD Real 
+#Consultas a la BD Real   
 @app.get("/usuarios/{id}")
 def usuario_por_id(id: int, sesion:Session=Depends(generador_sesion)):
     print("Api consultando usuario por id:", id)
