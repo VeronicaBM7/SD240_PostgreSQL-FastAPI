@@ -60,18 +60,33 @@ def compras_usuario_por_id(id: int, id_compra: int):
         "producto": "TV",
         "precio": 14000
     }
-
     return compra
+
 #Consultas a la BD Real   
 @app.get("/usuarios/{id}")
 def usuario_por_id(id: int, sesion:Session=Depends(generador_sesion)):
     print("Api consultando usuario por id:", id)
     return repo.usuario_por_id(sesion, id)
 
+#GET 'usuarios?edad=edad_min&edad=edad_min
+#select * from app.usuarios where edad >= {edad_min} and edad <= {edad_max} 
+@app.get("/usuarios")
+def usuarios_por_edad(edad_min: int, edad_max: int, sesion:Session=Depends(generador_sesion)):
+    print(f"Api consultando usuarios por rango de edad de {edad_min} y {edad_max}")
+    return repo.usuarios_por_edad(sesion, edad_min, edad_max)
+
 @app.get("/compras/{id}")
 def compra_por_id(id: int, sesion:Session=Depends(generador_sesion)):
     print("Api consultando compra por id:", id)
     return repo.compra_por_id(sesion, id)
+
+#GET '/compras?id_usuario={id_usr}&precio={p}'
+@app.get("/compras")
+def compras_por_id_precio(id_usuario:int, precio:float, sesion:Session=Depends(generador_sesion)):
+    print(f"/compras?id_usuario={id_usuario}&precio={precio}'")
+    return repo.compras_por_id_precio(sesion, id_usuario, precio)
+
+
 
 @app.get("/fotos/{id}")
 def foto_por_id(id: int, sesion:Session=Depends(generador_sesion)):
@@ -80,11 +95,27 @@ def foto_por_id(id: int, sesion:Session=Depends(generador_sesion)):
 
 
 @app.get("/usuarios")
-def lista_usuarios(*,lote:int=10,pag:int,orden:Optional[str]=None): #parametros de consulta ?lote=10&pag=1
-    print("lote:",lote, " pag:", pag, " orden:", orden)
-    #simulamos la consulta
-    return usuarios
+def lista_usuarios(sesion:Session=Depends(generador_sesion)): 
+    print("Api consultando usuarios")
+    return repo.lista_usuarios(sesion)
 
+@app.get("/compras")
+def lista_compras(sesion:Session=Depends(generador_sesion)): 
+    print("Api consultando compras")
+    return repo.lista_compras(sesion)
+
+@app.get("/fotos")
+def lista_fotos(sesion:Session=Depends(generador_sesion)):
+    print("Api consultando fotos")
+    return repo.lista_fotos(sesion)
+
+
+
+
+
+
+
+############Simulacion de consulta
 @app.post("/usuarios")
 def guardar_usuario(usuario:UsuarioBase, parametro1:str):
     print("usuario a guardar:", usuario, ", parametro1:", parametro1)

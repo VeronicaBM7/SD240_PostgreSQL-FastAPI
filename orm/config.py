@@ -12,18 +12,18 @@ URL_BASE_DATOS = "postgresql://usuario-ejemplo:12345@localhost:5432/base-ejemplo
 #Conectarnos mediante el esquema app
 engine = create_engine(URL_BASE_DATOS, 
                             connect_args={
-                                'options': "-csearch_path=app"
+                                "options": "-csearch_path=app"
                             })
 #2. Obtener la clase que nos permite crear objetos tipo session
 SessionClass = sessionmaker(engine) 
 #Crear una funcion para obtener objetos de la clase SessionClass
-def obtener_sesion():
-    sesision = SessionClass()
+def generador_sesion():
+    sesion = SessionClass()
     try:
         #Equivalente a un return sesion pero de manera segura
-        yield sesision 
+        yield sesion 
     finally:
-        sesision.close()
+        sesion.close()
 
 #3 obter la clase base para mapear
 BaseClass = declarative_base()
